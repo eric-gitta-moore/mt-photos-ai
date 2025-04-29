@@ -7,7 +7,8 @@ services:
       - API_AUTH_KEY=4C22E759-8589-475E-8895-9DCB3088E2F6
       - CLIP_MODEL=ViT-B-16
     volumes:
-      - ./models:/root/models
+      - ./models/clip:/app/.cache/clip
+      - ./models/rapidocr:/app/.venv/lib/python3.11/site-packages/rapidocr/models/
     deploy:
       resources:
         reservations:

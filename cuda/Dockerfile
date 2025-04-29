@@ -28,5 +28,5 @@ ENV API_AUTH_KEY=mt_photos_ai_extra
 ENV CLIP_MODEL=ViT-B-16
 
 EXPOSE 8060
-VOLUME [ "/root/models" ]
+VOLUME [ "/app/.cache/clip", "/app/.venv/lib/python3.11/site-packages/rapidocr/models/" ]
 CMD [ "python", "/app/server.py" ]

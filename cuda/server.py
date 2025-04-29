@@ -7,6 +7,7 @@ import uvicorn
 import numpy as np
 import cv2
 import asyncio
+
 # from paddleocr import PaddleOCR
 import torch
 from PIL import Image, ImageFile
@@ -14,9 +15,10 @@ from io import BytesIO
 from pydantic import BaseModel
 from rapidocr import RapidOCR  # Paddle的cuda镜像太大，改用torch，RapidOCR支持torch
 import cn_clip.clip as clip
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-on_linux = sys.platform.startswith('linux')
+on_linux = sys.platform.startswith("linux")
 
 load_dotenv()
 app = FastAPI()
@@ -24,7 +26,9 @@ app = FastAPI()
 api_auth_key = os.getenv("API_AUTH_KEY", "mt_photos_ai_extra")
 http_port = int(os.getenv("HTTP_PORT", "8060"))
 server_restart_time = int(os.getenv("SERVER_RESTART_TIME", "300"))
-env_auto_load_txt_modal = os.getenv("AUTO_LOAD_TXT_MODAL", "off") == "on" # 是否自动加载CLIP文本模型，开启可以优化第一次搜索时的响应速度,文本模型占用700多m内存
+env_auto_load_txt_modal = (
+    os.getenv("AUTO_LOAD_TXT_MODAL", "off") == "on"
+)  # 是否自动加载 CLIP 文本模型，开启可以优化第一次搜索时的响应速度，文本模型占用 700 多 m 内存
 
 clip_model_name = os.getenv("CLIP_MODEL")
 
@@ -38,8 +42,10 @@ restart_lock = asyncio.Lock()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
+
 class ClipTxtRequest(BaseModel):
     text: str
+
 
 def load_ocr_model():
     global ocr_model
@@ -47,11 +53,14 @@ def load_ocr_model():
         ocr_model = RapidOCR(
             params={
                 "Global.with_torch": True,
-                "EngineConfig.torch.use_cuda": torch.cuda.is_available(),  # 使用torch GPU版推理
-                # "EngineConfig.torch.gpu_id": 0,  # 指定GPU id
+                "EngineConfig.torch.use_cuda": torch.cuda.is_available(),  # 使用 torch GPU 版推理
+                "Global.lang_det": "ch_server",
+                "Global.lang_rec": "ch_server",
+                # "EngineConfig.torch.gpu_id": 0,  # 指定 GPU id
             }
         )
         # https://rapidai.github.io/RapidOCRDocs/main/install_usage/rapidocr/usage/
+
 
 def load_clip_model():
     global clip_processor
@@ -62,10 +71,12 @@ def load_clip_model():
         clip_model = model
         clip_processor = preprocess
 
+
 @app.on_event("startup")
 async def startup_event():
     if env_auto_load_txt_modal:
         load_clip_model()
+
 
 @app.on_event("shutdown")
 async def on_shutdown():
@@ -76,9 +87,11 @@ async def on_shutdown():
         except asyncio.CancelledError:
             pass
 
+
 async def restart_timer():
     await asyncio.sleep(server_restart_time)
     restart_program()
+
 
 @app.middleware("http")
 async def activity_monitor(request, call_next):
@@ -104,10 +117,11 @@ async def verify_header(api_key: str = Header(...)):
 def to_fixed(num):
     return str(round(num, 2))
 
+
 def convert_rapidocr_to_json(rapidocr_output):
 
     if rapidocr_output.txts is None:
-        return {'texts': [], 'scores': [], 'boxes': []}
+        return {"texts": [], "scores": [], "boxes": []}
 
     texts = list(rapidocr_output.txts)
     scores = [f"{score:.2f}" for score in rapidocr_output.scores]
@@ -124,20 +138,19 @@ def convert_rapidocr_to_json(rapidocr_output):
         width = x_max - x_min
         height = y_max - y_min
 
-        boxes.append({
-            'x': to_fixed(x_min),
-            'y': to_fixed(y_min),
-            'width': to_fixed(width),
-            'height': to_fixed(height)
-        })
+        boxes.append(
+            {
+                "x": to_fixed(x_min),
+                "y": to_fixed(y_min),
+                "width": to_fixed(width),
+                "height": to_fixed(height),
+            }
+        )
 
-    output = {
-        'texts': texts,
-        'scores': scores,
-        'boxes': boxes
-    }
+    output = {"texts": texts, "scores": scores, "boxes": boxes}
 
     return output
+
 
 @app.get("/", response_class=HTMLResponse)
 async def top_info():
@@ -161,27 +174,31 @@ async def top_info():
 @app.post("/check")
 async def check_req(api_key: str = Depends(verify_header)):
     return {
-        'result': 'pass',
+        "result": "pass",
         "title": "mt-photos-ai服务",
         "help": "https://mtmt.tech/docs/advanced/ocr_api",
-        "device": device
+        "device": device,
     }
 
 
 @app.post("/restart")
 async def check_req(api_key: str = Depends(verify_header)):
     # cuda版本 OCR没有显存未释放问题，这边可以关闭重启
-    return {'result': 'unsupported'}
+    return {"result": "unsupported"}
     # restart_program()
+
 
 @app.post("/restart_v2")
 async def check_req(api_key: str = Depends(verify_header)):
     # 预留触发服务重启接口-自动释放内存
     restart_program()
-    return {'result': 'pass'}
+    return {"result": "pass"}
+
 
 @app.post("/ocr")
-async def process_image(file: UploadFile = File(...), api_key: str = Depends(verify_header)):
+async def process_image(
+    file: UploadFile = File(...), api_key: str = Depends(verify_header)
+):
     load_ocr_model()
     image_bytes = await file.read()
     try:
@@ -189,35 +206,42 @@ async def process_image(file: UploadFile = File(...), api_key: str = Depends(ver
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
         height, width, _ = img.shape
         if width > 10000 or height > 10000:
-            return {'result': [], 'msg': 'height or width out of range'}
+            return {"result": [], "msg": "height or width out of range"}
 
         _result = await predict(ocr_model, img)
         result = convert_rapidocr_to_json(_result)
         del img
         del _result
-        return {'result': result}
+        return {"result": result}
     except Exception as e:
         print(e)
-        return {'result': [], 'msg': str(e)}
+        return {"result": [], "msg": str(e)}
+
 
 @app.post("/clip/img")
-async def clip_process_image(file: UploadFile = File(...), api_key: str = Depends(verify_header)):
+async def clip_process_image(
+    file: UploadFile = File(...), api_key: str = Depends(verify_header)
+):
     load_clip_model()
     image_bytes = await file.read()
     try:
         image = clip_processor(Image.open(BytesIO(image_bytes))).unsqueeze(0).to(device)
         image_features = clip_model.encode_image(image)
-        return {'result': ["{:.16f}".format(vec) for vec in image_features[0]]}
+        return {"result": ["{:.16f}".format(vec) for vec in image_features[0]]}
     except Exception as e:
         print(e)
-        return {'result': [], 'msg': str(e)}
+        return {"result": [], "msg": str(e)}
+
 
 @app.post("/clip/txt")
-async def clip_process_txt(request:ClipTxtRequest, api_key: str = Depends(verify_header)):
+async def clip_process_txt(
+    request: ClipTxtRequest, api_key: str = Depends(verify_header)
+):
     load_clip_model()
     text = clip.tokenize([request.text]).to(device)
     text_features = clip_model.encode_text(text)
-    return {'result': ["{:.16f}".format(vec) for vec in text_features[0]]}
+    return {"result": ["{:.16f}".format(vec) for vec in text_features[0]]}
+
 
 async def predict(predict_func, inputs):
     return await asyncio.get_running_loop().run_in_executor(None, predict_func, inputs)
