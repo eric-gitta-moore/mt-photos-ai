@@ -28,8 +28,8 @@ RUN pip3 install --no-cache-dir -r requirements.txt --index-url=https://pypi.tun
 ENV API_AUTH_KEY=mt_photos_ai_extra
 ENV CLIP_MODEL=ViT-B-16
 
-COPY ./models/clip_cn_vit-b-16.pt /root/.cache/clip/clip_cn_vit-b-16.pt
-COPY ./models/rapidocr/ /opt/conda/lib/python3.11/site-packages/rapidocr/models/
+# COPY ./models/clip_cn_vit-b-16.pt /root/.cache/clip/clip_cn_vit-b-16.pt
+# COPY ./models/rapidocr/ /opt/conda/lib/python3.11/site-packages/rapidocr/models/
 
 
 COPY server.py .

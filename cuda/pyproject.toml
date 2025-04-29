@@ -1,0 +1,32 @@
+[project]
+name = "cuda"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10,<3.12"
+dependencies = [
+    "cn-clip>=1.5.1",
+    "fastapi>=0.103.0",
+    "numpy>=1.24.4,<2",
+    "opencv-contrib-python>=4.6.0.66",
+    "opencv-python-headless>=4.6.0.66",
+    "python-dotenv>=1.0.0",
+    "python-multipart>=0.0.6",
+    "rapidocr>=2.0.6",
+    "uvicorn>=0.23.2",
+]
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+default = true
+
+[[tool.uv.index]]
+url = "https://download.pytorch.org/whl/cu124"
+include = ["torch", "torchvision", "torchaudio"]
+
+[project.optional-dependencies]
+cuda = [
+    "torch>=2.6",
+    "torchvision",
+    "torchaudio",
+]
