@@ -1,3 +1,5 @@
+name: photos-ai
+
 services:
   pohtos-ai:
     build: .

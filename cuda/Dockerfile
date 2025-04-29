@@ -21,7 +21,15 @@ WORKDIR /app
 
 COPY . .
 
-RUN uv sync --locked --extra cuda
+# Install dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --locked --no-install-project
+
+# Sync the project
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked --extra cuda
 
 ENV PATH="/app/.venv/bin:$PATH"
 ENV API_AUTH_KEY=mt_photos_ai_extra
