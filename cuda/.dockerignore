@@ -1,0 +1,15 @@
+.venv
+.git
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+sources.list
+Dockerfile
+.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
