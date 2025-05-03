@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:2.6.0-cuda12.4-cudnn9-runtime
+FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04
 USER root
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
@@ -31,7 +31,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --extra cuda
 
-ENV LD_LIBRARY_PATH="/opt/conda/lib:$LD_LIBRARY_PATH"
+# ENV LD_LIBRARY_PATH="/opt/conda/lib:$LD_LIBRARY_PATH"
 ENV PATH="/app/.venv/bin:$PATH"
 ENV API_AUTH_KEY=mt_photos_ai_extra
 ENV CLIP_MODEL=ViT-B-16
