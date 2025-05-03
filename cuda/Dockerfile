@@ -31,10 +31,13 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --locked --extra cuda
 
+ENV LD_LIBRARY_PATH="/opt/conda/lib:$LD_LIBRARY_PATH"
 ENV PATH="/app/.venv/bin:$PATH"
 ENV API_AUTH_KEY=mt_photos_ai_extra
 ENV CLIP_MODEL=ViT-B-16
+ENV RECOGNITION_MODEL=buffalo_l
+ENV DETECTION_THRESH=0.65
 
 EXPOSE 8060
-VOLUME [ "/app/.cache/clip", "/app/.venv/lib/python3.11/site-packages/rapidocr/models/" ]
+VOLUME [ "/app/.cache/clip", "/app/.venv/lib/python3.11/site-pa ckages/rapidocr/models/", "/root/.insightface/models"]
 CMD [ "python", "/app/server.py" ]
