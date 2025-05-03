@@ -70,7 +70,7 @@ def load_clip_model():
     global clip_processor
     global clip_model
     if clip_processor is None:
-        model, preprocess = clip.load_from_name(clip_model_name, device=device)
+        model, preprocess = clip.load_from_name(clip_model_name, device=device, download_root="/app/.cache/clip")
         model.eval()
         clip_model = model
         clip_processor = preprocess
