@@ -39,5 +39,5 @@ ENV RECOGNITION_MODEL=buffalo_l
 ENV DETECTION_THRESH=0.65
 
 EXPOSE 8060
-VOLUME [ "/app/.cache/clip", "/app/.venv/lib/python3.11/site-pa ckages/rapidocr/models/", "/root/.insightface/models"]
+VOLUME [ "/app/.cache/clip", "/app/.venv/lib/python3.11/site-packages/rapidocr/models/", "/root/.insightface/models"]
 CMD [ "python", "/app/server.py" ]
