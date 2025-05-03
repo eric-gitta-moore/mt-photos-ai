@@ -14,19 +14,23 @@ dependencies = [
     "python-multipart>=0.0.6",
     "rapidocr>=2.0.6",
     "uvicorn>=0.23.2",
+    "torch>=2.6",
+    "torchvision",
+    "torchaudio",
+    "insightface>=0.7.3",
+    "onnxruntime-gpu>=1.21.1",
 ]
+
+[tool.uv.sources]
+torch = [{ index = "pytorch" }]
+torchvision = [{ index = "pytorch" }]
+torchaudio = [{ index = "pytorch" }]
 
 [[tool.uv.index]]
 url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 default = true
 
 [[tool.uv.index]]
+name = "pytorch"
 url = "https://download.pytorch.org/whl/cu124"
-include = ["torch", "torchvision", "torchaudio"]
-
-[project.optional-dependencies]
-cuda = [
-    "torch>=2.6",
-    "torchvision",
-    "torchaudio",
-]
+explicit = true
