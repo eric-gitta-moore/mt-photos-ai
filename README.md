@@ -1,3 +1,9 @@
+只修改了 cuda 部分
+- RapidOCR
+- cn-clip
+- InsightFace
+
+---
 # MT Photos AI识别相关任务独立部署项目
 
 - 基于PaddleOCR实现的文本识别(OCR)接口
