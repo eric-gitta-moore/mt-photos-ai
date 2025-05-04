@@ -38,6 +38,7 @@ ENV CLIP_MODEL=ViT-B-16
 ENV RECOGNITION_MODEL=buffalo_l
 ENV DETECTION_THRESH=0.65
 ENV DEVICE=cuda
+ENV CLIP_DOWNLOAD_ROOT=/app/.cache/clip
 
 EXPOSE 8060
 VOLUME [ "/app/.cache/clip", "/app/.venv/lib/python3.11/site-packages/rapidocr/models/", "/root/.insightface/models"]

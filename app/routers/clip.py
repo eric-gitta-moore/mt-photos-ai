@@ -13,7 +13,8 @@ router = APIRouter(
     dependencies=[Depends(verify_header)],
 )
 
-clip_model_name = os.getenv("CLIP_MODEL")
+clip_model_name = os.getenv("CLIP_MODEL", "ViT-B-16")
+download_root = os.getenv("CLIP_DOWNLOAD_ROOT", "~/.cache/clip")
 clip_processor = None
 clip_model = None
 
@@ -23,7 +24,7 @@ def load_clip_model():
     global clip_model
     if clip_processor is None:
         model, preprocess = clip.load_from_name(
-            clip_model_name, device=device, download_root="/app/.cache/clip"
+            clip_model_name, device=device, download_root=download_root
         )
         model.eval()
         clip_model = model
