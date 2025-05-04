@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 clip_model_name = os.getenv("CLIP_MODEL", "ViT-B-16")
-download_root = os.getenv("CLIP_DOWNLOAD_ROOT", "~/.cache/clip")
+download_root = os.getenv("CLIP_DOWNLOAD_ROOT", "./models/clip")
 clip_processor = None
 clip_model = None
 
