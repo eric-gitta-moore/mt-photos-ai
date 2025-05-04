@@ -198,7 +198,7 @@ dependencies = [
     { name = "torch" },
     { name = "torchaudio" },
     { name = "torchvision" },
-    { name = "uvicorn" },
+    { name = "uvicorn", extra = ["standard"] },
 ]
 
 [package.metadata]
@@ -216,7 +216,7 @@ requires-dist = [
     { name = "torch", specifier = ">=2.6", index = "https://download.pytorch.org/whl/cu124" },
     { name = "torchaudio", index = "https://download.pytorch.org/whl/cu124" },
     { name = "torchvision", index = "https://download.pytorch.org/whl/cu124" },
-    { name = "uvicorn", specifier = ">=0.23.2" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.23.2" },
 ]
 
 [[package]]

@@ -3,7 +3,7 @@ from app.dependencies import verify_header
 from app.utils.util import restart_program
 
 router = APIRouter(
-    prefix="/",
+    prefix="",
     tags=["restart"],
     dependencies=[Depends(verify_header)],
 )
