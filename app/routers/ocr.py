@@ -31,7 +31,7 @@ def load_ocr_model():
         # https://rapidai.github.io/RapidOCRDocs/main/install_usage/rapidocr/usage/
 
 
-@router.post("/ocr")
+@router.post("/rec")
 async def process_image(file: UploadFile = File(...)):
     load_ocr_model()
     image_bytes = await file.read()
