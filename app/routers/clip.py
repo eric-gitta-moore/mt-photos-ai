@@ -45,7 +45,7 @@ async def clip_process_image(
         return {"result": [], "msg": str(e)}
 
 
-@app.post("/clip/txt")
+@router.post("/txt")
 async def clip_process_txt(
     request: ClipTxtRequest, api_key: str = Depends(verify_header)
 ):
