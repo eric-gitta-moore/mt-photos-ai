@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
-from cuda.app.config import device
+from app.config import device
 
 router = APIRouter(
-    prefix="/",
+    prefix="",
     tags=["index"],
 )
 

@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, File, UploadFile
 from app.dependencies import verify_header
 from app.utils.util import predict
 from app.utils.util import to_fixed
-from cuda.app.config import device
 from rapidocr import RapidOCR
 import torch
 

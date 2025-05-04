@@ -10,7 +10,7 @@ from insightface.app import FaceAnalysis
 from app.dependencies import verify_header
 from app.utils.util import predict
 import logging
-from cuda.app.config import onnx_providers
+from app.config import onnx_providers
 
 detector_backend = os.getenv("DETECTOR_BACKEND", "insightface")
 # 人脸检测及特征提取模型
