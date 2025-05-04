@@ -15,6 +15,7 @@ router = APIRouter(
 
 ocr_model = None
 
+
 def load_ocr_model():
     global ocr_model
     if ocr_model is None:
@@ -31,9 +32,7 @@ def load_ocr_model():
 
 
 @router.post("/ocr")
-async def process_image(
-    file: UploadFile = File(...), api_key: str = Depends(verify_header)
-):
+async def process_image(file: UploadFile = File(...)):
     load_ocr_model()
     image_bytes = await file.read()
     try:
@@ -51,7 +50,6 @@ async def process_image(
     except Exception as e:
         print(e)
         return {"result": [], "msg": str(e)}
-
 
 
 def convert_rapidocr_to_json(rapidocr_output):
@@ -86,4 +84,3 @@ def convert_rapidocr_to_json(rapidocr_output):
     output = {"texts": texts, "scores": scores, "boxes": boxes}
 
     return output
-

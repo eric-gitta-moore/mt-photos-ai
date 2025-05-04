@@ -31,9 +31,7 @@ def load_clip_model():
 
 
 @router.post("/img")
-async def clip_process_image(
-    file: UploadFile = File(...), api_key: str = Depends(verify_header)
-):
+async def clip_process_image(file: UploadFile = File(...)):
     load_clip_model()
     image_bytes = await file.read()
     try:
@@ -46,9 +44,7 @@ async def clip_process_image(
 
 
 @router.post("/txt")
-async def clip_process_txt(
-    request: ClipTxtRequest, api_key: str = Depends(verify_header)
-):
+async def clip_process_txt(request: ClipTxtRequest):
     load_clip_model()
     text = clip.tokenize([request.text]).to(device)
     text_features = clip_model.encode_text(text)
