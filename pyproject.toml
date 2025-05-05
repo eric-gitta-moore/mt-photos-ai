@@ -18,13 +18,23 @@ dependencies = [
     "torchvision",
     "torchaudio",
     "insightface>=0.7.3",
-    "onnxruntime-gpu>=1.21.1",
+    "onnxruntime-gpu>=1.21.1; sys_platform == 'linux' or sys_platform == 'win32'",
+    "onnxruntime>=1.21.1; sys_platform == 'darwin'",
 ]
 
 [tool.uv.sources]
-torch = [{ index = "pytorch" }]
-torchvision = [{ index = "pytorch" }]
-torchaudio = [{ index = "pytorch" }]
+torch = [
+    { index = "pytorch", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { index = "pytorch-cpu", marker = "sys_platform == 'darwin'" },
+]
+torchvision = [
+    { index = "pytorch", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { index = "pytorch-cpu", marker = "sys_platform == 'darwin'" },
+]
+torchaudio = [
+    { index = "pytorch", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+    { index = "pytorch-cpu", marker = "sys_platform == 'darwin'" },
+]
 
 [[tool.uv.index]]
 url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
@@ -33,4 +43,9 @@ default = true
 [[tool.uv.index]]
 name = "pytorch"
 url = "https://download.pytorch.org/whl/cu124"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
 explicit = true
