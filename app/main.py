@@ -47,4 +47,4 @@ async def activity_monitor(request, call_next):
 
 
 if __name__ == "__main__":
-    uvicorn.run("server:app", host=None, port=http_port)
+    uvicorn.run("main:app", host=None, port=http_port)
