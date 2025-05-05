@@ -1,8 +1,9 @@
 import os
 import sys
+import torch
 
 api_auth_key = os.getenv("API_AUTH_KEY", "mt_photos_ai_extra")
-device = os.getenv("DEVICE", "cuda")
+device = os.getenv("DEVICE", "cuda" if torch.cuda.is_available() else "cpu")
 onnx_providers = os.getenv("ONNX_PROVIDERS", "CUDAExecutionProvider,CPUExecutionProvider").split(",")
 on_linux = sys.platform.startswith("linux")
 http_port = int(os.getenv("HTTP_PORT", "8060"))

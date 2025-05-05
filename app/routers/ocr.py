@@ -6,6 +6,7 @@ from app.utils.util import predict
 from app.utils.util import to_fixed
 from rapidocr import RapidOCR
 import torch
+from app.config import device
 
 router = APIRouter(
     prefix="/ocr",
@@ -22,7 +23,7 @@ def load_ocr_model():
         ocr_model = RapidOCR(
             params={
                 "Global.with_torch": True,
-                "EngineConfig.torch.use_cuda": torch.cuda.is_available(),  # 使用 torch GPU 版推理
+                "EngineConfig.torch.use_cuda": device == "cuda",  # 使用 torch GPU 版推理
                 "Global.lang_det": "ch_server",
                 "Global.lang_rec": "ch_server",
                 # "EngineConfig.torch.gpu_id": 0,  # 指定 GPU id
