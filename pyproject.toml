@@ -19,8 +19,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-cuda = ["onnxruntime-gpu>=1.21.1", "torch>=2.6", "torchvision", "torchaudio"]
-cpu = ["onnxruntime>=1.21.1", "torch>=2.6", "torchvision", "torchaudio"]
+cuda = ["onnxruntime-gpu>=1.21.1", "torch>=2.6.0", "torchvision", "torchaudio"]
+cpu = ["onnxruntime>=1.21.1", "torch>=2.6.0", "torchvision", "torchaudio"]
 
 [tool.uv]
 conflicts = [[{ extra = "cuda" }, { extra = "cpu" }]]
