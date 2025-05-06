@@ -14,14 +14,13 @@ dependencies = [
     "python-multipart>=0.0.6",
     "rapidocr>=2.0.6",
     "uvicorn[standard]>=0.23.2",
-    "torch>=2.6",
-    "torchvision",
-    "torchaudio",
     "insightface>=0.7.3",
-    "onnxruntime-gpu>=1.21.1; sys_platform == 'linux' or sys_platform == 'win32'",
-    "onnxruntime>=1.21.1; sys_platform == 'darwin'",
     "requests>=2.28.1",
 ]
+
+[project.optional-dependencies]
+cuda = ["onnxruntime-gpu>=1.21.1", "torch>=2.6", "torchvision", "torchaudio"]
+cpu = ["onnxruntime>=1.21.1", "torch>=2.6", "torchvision", "torchaudio"]
 
 [tool.uv.sources]
 torch = [

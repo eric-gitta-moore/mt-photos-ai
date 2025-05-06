@@ -1,4 +1,7 @@
 FROM nvidia/cuda:12.8.1-cudnn-devel-ubuntu22.04
+
+ARG BUILD_DEVICE=cpu
+
 USER root
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
@@ -25,20 +28,20 @@ COPY . .
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --locked --no-install-project
+    uv sync --extra ${BUILD_DEVICE} --locked --no-install-project
 
 # Sync the project
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked
+    uv sync --extra ${BUILD_DEVICE} --locked
 
 # ENV LD_LIBRARY_PATH="/opt/conda/lib:$LD_LIBRARY_PATH"
-ENV PATH="/app/.venv/bin:$PATH"
-ENV API_AUTH_KEY=mt_photos_ai_extra
-ENV CLIP_MODEL=ViT-B-16
-ENV RECOGNITION_MODEL=buffalo_l
-ENV DETECTION_THRESH=0.65
-ENV DEVICE=cuda
-ENV CLIP_DOWNLOAD_ROOT=/app/.cache/clip
+ENV PATH="/app/.venv/bin:$PATH" \
+    API_AUTH_KEY=mt_photos_ai_extra \
+    CLIP_MODEL=ViT-B-16 \
+    RECOGNITION_MODEL=buffalo_l \
+    DETECTION_THRESH=0.65 \
+    DEVICE=${BUILD_DEVICE} \
+    CLIP_DOWNLOAD_ROOT=/app/.cache/clip
 
 EXPOSE 8060
 VOLUME [ "/app/.cache/clip", "/app/.venv/lib/python3.11/site-packages/rapidocr/models/", "/root/.insightface/models"]
