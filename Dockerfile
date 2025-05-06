@@ -28,11 +28,7 @@ COPY . .
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --extra ${BUILD_DEVICE} --locked --no-install-project
-
-# Sync the project
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --extra ${BUILD_DEVICE} --locked
+    uv sync --extra ${BUILD_DEVICE} --locked --no-dev --no-editable --no-install-project --compile-bytecode --link-mode copy
 
 # ENV LD_LIBRARY_PATH="/opt/conda/lib:$LD_LIBRARY_PATH"
 ENV PATH="/app/.venv/bin:$PATH" \

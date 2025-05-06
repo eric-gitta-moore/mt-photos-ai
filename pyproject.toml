@@ -22,18 +22,21 @@ dependencies = [
 cuda = ["onnxruntime-gpu>=1.21.1", "torch>=2.6", "torchvision", "torchaudio"]
 cpu = ["onnxruntime>=1.21.1", "torch>=2.6", "torchvision", "torchaudio"]
 
+[tool.uv]
+conflicts = [[{ extra = "cuda" }, { extra = "cpu" }]]
+
 [tool.uv.sources]
 torch = [
-    { index = "pytorch", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
-    { index = "pytorch-cpu", marker = "sys_platform == 'darwin'" },
+    { index = "pytorch-cuda", extra = "cuda" },
+    { index = "pytorch-cpu", extra = "cpu" },
 ]
 torchvision = [
-    { index = "pytorch", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
-    { index = "pytorch-cpu", marker = "sys_platform == 'darwin'" },
+    { index = "pytorch-cuda", extra = "cuda" },
+    { index = "pytorch-cpu", extra = "cpu" },
 ]
 torchaudio = [
-    { index = "pytorch", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
-    { index = "pytorch-cpu", marker = "sys_platform == 'darwin'" },
+    { index = "pytorch-cuda", extra = "cuda" },
+    { index = "pytorch-cpu", extra = "cpu" },
 ]
 
 [[tool.uv.index]]
@@ -41,7 +44,7 @@ url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
 default = true
 
 [[tool.uv.index]]
-name = "pytorch"
+name = "pytorch-cuda"
 url = "https://download.pytorch.org/whl/cu124"
 explicit = true
 
