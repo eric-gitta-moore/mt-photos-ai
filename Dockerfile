@@ -32,6 +32,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # ENV LD_LIBRARY_PATH="/opt/conda/lib:$LD_LIBRARY_PATH"
 ENV PATH="/app/.venv/bin:$PATH" \
+    PYTHONPATH="/app" \
     API_AUTH_KEY=mt_photos_ai_extra \
     CLIP_MODEL=ViT-B-16 \
     RECOGNITION_MODEL=buffalo_l \
@@ -41,6 +42,6 @@ ENV PATH="/app/.venv/bin:$PATH" \
 
 EXPOSE 8060
 VOLUME [ "/app/.cache/clip", "/app/.venv/lib/python3.11/site-packages/rapidocr/models/", "/root/.insightface/models"]
-CMD [ "python", "/app/main.py" ]
+CMD [ "python", "/app/app/main.py" ]
 
 HEALTHCHECK CMD python3 scripts/healthcheck.py
