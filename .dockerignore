@@ -13,3 +13,6 @@ Dockerfile
 .env.development.local
 .env.test.local
 .env.production.local
+Makefile
+.vscode
+requirements.txt
