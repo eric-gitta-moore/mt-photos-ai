@@ -1,6 +1,5 @@
 ARG DEVICE=cpu
 FROM python:3.11-bookworm AS builder-cpu
-FROM builder-cpu AS builder-cuda
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -10,6 +9,7 @@ RUN apt-get update && \
     liblmdb-dev && \
     rm -rf /var/lib/apt/lists/*
 
+FROM builder-cpu AS builder-cuda
 
 FROM builder-${DEVICE} AS builder
 ARG DEVICE
