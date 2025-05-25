@@ -8,14 +8,14 @@ FROM builder-${DEVICE} AS builder
 ARG DEVICE
 WORKDIR /app
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-COPY . .
+# COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+# COPY . .
 
-# Install dependencies
-RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=type=bind,source=uv.lock,target=uv.lock \
-    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --extra ${DEVICE} --frozen --no-dev --compile --link-mode copy
+# # Install dependencies
+# RUN --mount=type=cache,target=/root/.cache/uv \
+#     --mount=type=bind,source=uv.lock,target=uv.lock \
+#     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+#     uv sync --extra ${DEVICE} --frozen --no-dev --compile --link-mode copy
 #endregion builder
 
 
@@ -36,8 +36,15 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY --from=builder /app/.venv /app/.venv
+# COPY --from=builder /app/.venv /app/.venv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 COPY . .
+# Install dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync --extra ${DEVICE} --frozen --no-dev --compile --link-mode copy
+
 
 # ENV LD_LIBRARY_PATH="/opt/conda/lib:$LD_LIBRARY_PATH"
 ENV PATH="/app/.venv/bin:$PATH" \
