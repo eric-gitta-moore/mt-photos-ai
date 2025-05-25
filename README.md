@@ -3,6 +3,7 @@
 - cn-clip
 - InsightFace
 
+
 ---
 # MT Photos AI识别相关任务独立部署项目
 
