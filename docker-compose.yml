@@ -2,7 +2,10 @@ name: photos-ai
 
 services:
   pohtos-ai:
-    build: .
+    build:
+      context: .
+      args:
+        - DEVICE=cuda
     ports:
       - 8060:8060
     environment:
