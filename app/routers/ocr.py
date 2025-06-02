@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, File, UploadFile
 from app.dependencies import verify_header
 from app.utils.util import predict
 from app.utils.util import to_fixed
-from rapidocr import RapidOCR
 import torch
+from rapidocr import EngineType, LangDet, ModelType, OCRVersion, RapidOCR
 from app.config import device
 
 router = APIRouter(
@@ -19,12 +19,19 @@ ocr_model = None
 def load_ocr_model():
     global ocr_model
     if ocr_model is None:
+        with_torch = True if device == "cuda" else False
+        engine_type = EngineType.TORCH if with_torch else EngineType.ONNXRUNTIME
         ocr_model = RapidOCR(
             params={
-                "Global.with_torch": True,
-                "EngineConfig.torch.use_cuda": device == "cuda",  # 使用 torch GPU 版推理
-                "Global.lang_det": "ch_server",
-                "Global.lang_rec": "ch_server",
+                "Det.engine_type": engine_type,
+                "Det.ocr_version": OCRVersion.PPOCRV5,
+                "Cls.engine_type": engine_type,
+                # "Cls.ocr_version": OCRVersion.PPOCRV5,
+                "Rec.engine_type": engine_type,
+                "Rec.ocr_version": OCRVersion.PPOCRV5,
+                "EngineConfig.torch.use_cuda": with_torch,
+                # "Global.lang_det": "ch_server",
+                # "Global.lang_rec": "ch_server",
                 # "EngineConfig.torch.gpu_id": 0,  # 指定 GPU id
             }
         )
