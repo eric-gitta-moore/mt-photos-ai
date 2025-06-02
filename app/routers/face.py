@@ -30,7 +30,6 @@ faceAnalysis.prepare(ctx_id=0, det_thresh=detection_thresh, det_size=(640, 640))
 
 
 router = APIRouter(
-    prefix="/face",
     tags=["face"],
     dependencies=[Depends(verify_header)],
 )

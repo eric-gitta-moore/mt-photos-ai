@@ -10,7 +10,7 @@ from app.routers import ping, clip, ocr, face, index, restart
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 load_dotenv()
-app = FastAPI()
+app = FastAPI(docs_url="/docs", redoc_url="/redoc")
 app.include_router(index.router)
 app.include_router(restart.router)
 app.include_router(ping.router)
