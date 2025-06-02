@@ -24,14 +24,18 @@ recognition_model = os.getenv("RECOGNITION_MODEL", "buffalo_l")
 detection_thresh = float(os.getenv("DETECTION_THRESH", "0.65"))
 # 设置下载模型URL
 storage.BASE_REPO_URL = "https://github.com/kqstone/mt-photos-insightface-unofficial/releases/download/models"
-# 初始化人脸识别器
-faceAnalysis = FaceAnalysis(
-    providers=onnx_providers,
-    allowed_modules=["detection", "recognition"],
-    name=recognition_model,
-)
-faceAnalysis.prepare(ctx_id=0, det_thresh=detection_thresh, det_size=(640, 640))
+faceAnalysis = None
 
+def load_face_model():
+    global faceAnalysis
+    if faceAnalysis is None:
+        # 初始化人脸识别器
+        faceAnalysis = FaceAnalysis(
+            providers=onnx_providers,
+            allowed_modules=["detection", "recognition"],
+            name=recognition_model,
+        )
+        faceAnalysis.prepare(ctx_id=0, det_thresh=detection_thresh, det_size=(640, 640))
 
 router = APIRouter(
     tags=["face"],
@@ -53,6 +57,8 @@ async def top_info():
     dependencies=[Depends(verify_header)],
 )
 async def process_image(file: UploadFile = File(...)):
+    load_face_model()
+    
     content_type = file.content_type
 
     image_bytes = await file.read()
