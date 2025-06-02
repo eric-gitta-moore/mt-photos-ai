@@ -18,11 +18,4 @@ services:
       - ./models/clip:/app/.cache/clip
       - ./models/rapidocr:/app/.venv/lib/python3.11/site-packages/rapidocr/models/
       - ./models/insightface:/root/.insightface/models
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities:
-                - gpu
+    gpus: all
