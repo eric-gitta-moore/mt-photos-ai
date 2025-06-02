@@ -9,7 +9,6 @@ import torch
 from app.config import device
 
 router = APIRouter(
-    prefix="/ocr",
     tags=["ocr"],
     dependencies=[Depends(verify_header)],
 )
@@ -32,7 +31,7 @@ def load_ocr_model():
         # https://rapidai.github.io/RapidOCRDocs/main/install_usage/rapidocr/usage/
 
 
-@router.post("/")
+@router.post("/ocr")
 async def process_image(file: UploadFile = File(...)):
     load_ocr_model()
     image_bytes = await file.read()
