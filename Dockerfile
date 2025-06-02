@@ -1,4 +1,4 @@
-ARG DEVICE=cpu
+ARG DEVICE=cuda
 
 #region builder
 FROM python:3.11-bookworm AS builder-cpu
