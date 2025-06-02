@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, File, UploadFile
 from app.dependencies import verify_header
 from app.utils.util import predict
 from app.utils.util import to_fixed
-import torch
 from rapidocr import EngineType, LangDet, ModelType, OCRVersion, RapidOCR
 from app.config import device
 
