@@ -57,8 +57,6 @@ async def top_info():
     dependencies=[Depends(verify_header)],
 )
 async def process_image(file: UploadFile = File(...)):
-    load_face_model()
-    
     content_type = file.content_type
 
     image_bytes = await file.read()
@@ -87,6 +85,7 @@ async def process_image(file: UploadFile = File(...)):
         if width > 10000 or height > 10000:
             return {"result": [], "msg": "height or width out of range"}
 
+        load_face_model()
         data = {
             "detector_backend": detector_backend,
             "recognition_model": recognition_model,
