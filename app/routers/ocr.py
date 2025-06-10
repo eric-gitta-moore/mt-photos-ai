@@ -23,11 +23,11 @@ def load_ocr_model():
         ocr_model = RapidOCR(
             params={
                 "Det.engine_type": engine_type,
-                "Det.ocr_version": OCRVersion.PPOCRV5,
+                # "Det.ocr_version": OCRVersion.PPOCRV5, pytorch 没有 v5 版本
                 "Cls.engine_type": engine_type,
                 # "Cls.ocr_version": OCRVersion.PPOCRV5,
                 "Rec.engine_type": engine_type,
-                "Rec.ocr_version": OCRVersion.PPOCRV5,
+                # "Rec.ocr_version": OCRVersion.PPOCRV5,
                 "EngineConfig.torch.use_cuda": with_torch,
                 # "Global.lang_det": "ch_server",
                 # "Global.lang_rec": "ch_server",
